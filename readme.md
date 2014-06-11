@@ -34,3 +34,4 @@ middleman build
 middleman deploy
 ```
 
+(See http://middlemanapp.com/basics/getting-started/ for Middleman documentation)
