@@ -81,3 +81,11 @@ configure :build do
   # set :http_prefix, "/Content/images/"
 end
 
+activate :deploy do |deploy|
+  deploy.method   = :rsync
+  deploy.host     = "your.server.com"
+  deploy.path     = "/usr/share/nginx/html"
+  # Optional Settings
+  deploy.user     = "root"
+  deploy.password = "secret"
+end
