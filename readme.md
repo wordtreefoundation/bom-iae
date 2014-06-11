@@ -14,8 +14,13 @@ If you'd like to host your own annotated Book of Mormon, you'll need these compo
 - python
 - annotator-store (backend to JS-annotator)
 - nginx or apache
+- ruby (and bundler)
 
 Once the above prerequisites are installed on your server, you can build and deploy BoM:IAE like so:
+
+```
+bundle install
+```
 
 ```
 middleman build
