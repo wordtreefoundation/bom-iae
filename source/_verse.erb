@@ -24,12 +24,7 @@
            data-edition="<%= year %>"
            data-book="<%= book %>"
            data-chapter="<%= v.meta.chapter %>"
-           data-verse="<%= v.meta.chapter %>">
-        <a class="ref" href="#<%= verse_id %>">
-          <%= "#{book} #{v.meta.chapter}:#{v.meta.verse}" %>
-        </a>
-        <%= v['content'] %>
-      </div>
+           data-verse="<%= v.meta.chapter %>"><a class="ref" href="#<%= verse_id %>"><%= "#{book} #{v.meta.chapter}:#{v.meta.verse}" %></a> <%= v['content'] %></div>
       <% end %>
     <% end %>
 
