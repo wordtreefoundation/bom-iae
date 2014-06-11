@@ -6,41 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><%= current_page.data.title || "The Book of Mormon &mdash; Internet-Annotated Edition" %></title>
 
-    <!-- Bootstrap -->
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="css/narrow.css">
-
-    <!-- Annotator -->
-    <link rel="stylesheet" type="text/css" href="css/annotator.css" />
-
-    <style>
-      body { 
-        font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
-        font-weight: 300; }
-      .sidebar { border-left: 2px solid #ccc; }
-      .hidden-verse { display: none; }
-      .btn-choose-bom-edition { position: absolute; left: -55px; }
-      .btn-thin { padding: 0px 6px; }
-    </style>
+    <%= stylesheet_link_tag "narrow", "annotator", "all" %>
 
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-  <body>
+  <body class="<%= page_classes %>">
     <div class="container">
       <div class="header">
         <ul class="nav nav-pills pull-right">
-          <li><a href="index.html">Table of Contents</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="contact.html">Contact</a></li>
+          <li class="<%= if current_page.data.tab == "toc" then "active" end %>"><a href="index.html">Table of Contents</a></li>
+          <li class="<%= if current_page.data.tab == "about" then "active" end %>"><a href="about.html">About</a></li>
+          <li class="<%= if current_page.data.tab == "contact" then "active" end %>"><a href="contact.html">Contact</a></li>
         </ul>
         <h3 class="text-muted">The Book of Mormon</h3>
       </div>
 
       <div id="content">
-      <%= content %>
+      <%= yield %>
       </div>
 
       <div class="footer">
@@ -56,119 +42,9 @@
     <script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 
     <!-- Annotator -->
-    <script src="showdown.js"></script>
-    <script src="annotator-full.min.js"></script>
+    <%= javascript_include_tag  "showdown", "annotator-full" %>
 
-    <script>
-    function evaluateXPath(xp, root, nsResolver) {
-      return document.evaluate(
-            '.' + xp,
-            root || document,
-            nsResolver || null,
-            XPathResult.FIRST_ORDERED_NODE_TYPE,
-            null
-          ).singleNodeValue
-    }
-    $(function() {
-      $('.choose-bom-edition a').click(function(e) {
-        e.preventDefault();
-
-        // Make the button show the selection
-        var group = $(e.target).closest('.btn-group');
-        var btn = group.find('button');
-        btn.html($(e.target).html() + ' <span class="caret"></span>');
-
-        // Show the selected edition of the BoM
-        var req_edition = $(e.target).data('edition');
-        var verse = group.closest('.verse');
-        verse.find('.bom').hide();
-        verse.find('.' + req_edition).show();
-      });
-
-      if(Annotator.supported()) {
-        var elem = document.getElementById('content');
-
-        var Adder = Annotator.Plugin.fetch('Adder');
-        var TextSelector = Annotator.Plugin.fetch('TextSelector');
-        var LegacyRanges = Annotator.Plugin.fetch('LegacyRanges');
-        var Editor = Annotator.Plugin.fetch('Editor');
-        var Highlighter = Annotator.Plugin.fetch('Highlighter');
-        var Viewer = Annotator.Plugin.fetch('Viewer');
-        var Store = Annotator.Plugin.fetch('Store');
-        // var Auth = Annotator.Plugin.fetch('Auth');
-        // var Permissions = Annotator.Plugin.fetch('Permissions');
-        var Unsupported = Annotator.Plugin.fetch('Unsupported');
-        var Markdown = Annotator.Plugin.fetch('Markdown');
-        var Tags = Annotator.Plugin.fetch('Tags');
-
-        var annotator = (new Annotator.Factory())
-          .addPlugin(Adder)
-          .addPlugin(TextSelector, elem)
-          .addPlugin(LegacyRanges, elem)
-          .addPlugin(Highlighter, elem)
-          .addPlugin(Viewer, {
-            showEditButton: true,
-            showDeleteButton: true,
-          })
-          .addPlugin(Editor)
-          .setStore(Store, {prefix: 'http://annotate.wordtree.org/api'})
-          // .addPlugin(Auth, {tokenUrl: 'http://localhost:4000/api/token'})
-          // .addPlugin(Permissions)
-          .addPlugin(Unsupported)
-          .addPlugin(Markdown)
-          .addPlugin(Tags)
-          .getInstance();
-
-        var current_uri = [location.protocol, '//', location.host, location.pathname].join('');
-        annotator.subscribe('beforeAnnotationCreated', function (annotation) {
-          var xpath = annotation.ranges[0].start;
-          var el = evaluateXPath(xpath, elem);
-          if (el) {
-            var meta = {
-              "edition": $(el).data('edition'),
-              "book": $(el).data('book'),
-              "chapter": $(el).data('chapter'),
-              "verse": $(el).data('verse')
-            };
-            annotation.source_meta = meta;
-            console.log("Added metadata: ", meta, annotation);
-          } else {
-            console.log("Unable to find xpath: ", xpath, annotation);
-          }
-          annotation.uri = current_uri;
-        })
-        annotator.attach(elem);
-        annotator.annotations.load({uri: current_uri});
-
-        annotator.on("all", function () {
-          // console.log("Annotator event:", arguments);
-        });
-      } else {
-        // Fallback for unsupported browsers.
-        alert("Annotations are unsupported on your browser.");
-      }
-
-    });
-    </script>
-  </body>
-</html>
-
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    
-    <!-- Always force latest IE rendering engine or request Chrome Frame -->
-    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
-    
-    <!-- Use title if it's in the page YAML frontmatter -->
-    <title></title>
-    
-    <%= stylesheet_link_tag "normalize", "all" %>
-    <%= javascript_include_tag  "all" %>
-  </head>
-  
-  <body class="<%= page_classes %>">
-    <%= yield %>
+    <!-- App-specific -->
+    <%= javascript_include_tag "choose-edition", "setup-annotator" %>
   </body>
 </html>

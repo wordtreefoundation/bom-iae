@@ -28,6 +28,16 @@
 # proxy "/this-page-has-no-template.html", "/template-file.html", :locals => {
 #  :which_fake_page => "Rendering a fake page with a local variable" }
 
+def kabob(name)
+  name.downcase.gsub(/\s+/, '-')
+end
+
+data.bom.each_pair do |book, verses|
+  proxy "/#{kabob(book)}.html", "/book.html",
+        :locals => { :book => book, :book_kabob => kabob(book), :verses => verses },
+        :ignore => true
+end
+
 ###
 # Helpers
 ###

@@ -1,0 +1,10 @@
+<% verses.each do |verse| %>
+<%= partial :verse,
+            :locals => {
+              :book => book,
+              :book_kabob => book_kabob,
+              :verse => verse,
+              :verse_id => "#{book_kabob}-#{verse.first.last.meta.chapter}-#{verse.first.last.meta.verse}",
+              :default_year => 1992
+            } %>
+<% end %>

@@ -1,0 +1,41 @@
+<div class="row verse" id="<%= verse_id %>">
+  <div class="col-lg-8">
+
+    <!-- Choose Edition -->
+    <div class="btn-group btn-choose-bom-edition">
+      <button type="button" class="btn btn-default dropdown-toggle btn-thin" data-toggle="dropdown">
+        <%= default_year %>&nbsp;<span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu choose-bom-edition" role="menu">
+        <% verse.each_pair do |year, v| %>
+        <li><a href="#" data-edition="bom<%= year %>"><%= year %></a></li>
+        <% end %>
+      </ul>
+    </div>
+
+    <% verse.each_pair do |year, v| %>
+      <% if v['meta']['heading'] %>
+      <div class="bom bom<%= year %> <%= year.to_i != default_year ? 'hidden-verse' : '' %>">
+        <%= v['content'] %>
+      </div>
+      <% else %>
+      <div id="<%= "bom#{year}-#{verse_id}" %>"
+           class="bom bom<%= year %> <%= year.to_i != default_year ? 'hidden-verse' : '' %>"
+           data-edition="<%= year %>"
+           data-book="<%= book %>"
+           data-chapter="<%= v.meta.chapter %>"
+           data-verse="<%= v.meta.chapter %>">
+        <a class="ref" href="#<%= verse_id %>">
+          <%= "#{book} #{v.meta.chapter}:#{v.meta.verse}" %>
+        </a>
+        <%= v['content'] %>
+      </div>
+      <% end %>
+    <% end %>
+
+  </div>
+
+  <div class="col-lg-4 sidebar">
+    <!-- TODO: Sidebar annotations -->
+  </div>
+</div>
