@@ -20,13 +20,22 @@ easy_install virtualenv
 # pip install nosetests mock
 
 # Install annotator-store
-git clone https://github.com/openannotation/annotator-store.git
+# git clone https://github.com/openannotation/annotator-store.git
 
-cd annotator-store
+# cd annotator-store
+# virtualenv pyenv
+# source pyenv/bin/activate
+# pip install -e .
+# cp annotator.cfg.example annotator.cfg
+
+# Install annotateit
+git clone https://github.com/wordtreefoundation/annotateit.git
+cd annotateit
 virtualenv pyenv
-source pyenv/bin/activate
+apt-get install libevent-dev
+apt-get build-dep python-psycopg2
 pip install -e .
-cp annotator.cfg.example annotator.cfg
+pip install -e . -r requirements.txt
 
 # Install annotator
 #wget https://github.com/downloads/openannotation/annotator/annotator-full.1.2.7.zip

@@ -4,6 +4,8 @@ from flask.ext.babel import Babel
 from flask.ext.mail import Mail
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.user import current_user, login_required, UserManager, UserMixin, SQLAlchemyAdapter
+import datetime
+import jwt
 
 # Use a Class-based config to avoid needing a 2nd file
 class ConfigClass(object):
@@ -87,6 +89,17 @@ def create_app(test_config=None):                   # For automated tests
             """)
 
     return app
+
+    def generate_token(user_id):
+        return jwt.encode({
+          'consumerKey': CONSUMER_KEY,
+          'userId': user_id,
+          'issuedAt': _now().isoformat() + 'Z',
+          'ttl': CONSUMER_TTL
+        }, CONSUMER_SECRET)
+
+    def _now():
+        return datetime.datetime.utcnow().replace(microsecond=0)
 
 # Start development web server
 if __name__=='__main__':
