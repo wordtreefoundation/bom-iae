@@ -19,7 +19,7 @@ $(function() {
     var Highlighter = Annotator.Plugin.fetch('Highlighter');
     var Viewer = Annotator.Plugin.fetch('Viewer');
     var Store = Annotator.Plugin.fetch('Store');
-    // var Auth = Annotator.Plugin.fetch('Auth');
+    var Auth = Annotator.Plugin.fetch('Auth');
     // var Permissions = Annotator.Plugin.fetch('Permissions');
     var Unsupported = Annotator.Plugin.fetch('Unsupported');
     var Markdown = Annotator.Plugin.fetch('Markdown');
@@ -35,8 +35,8 @@ $(function() {
         showDeleteButton: true,
       })
       .addPlugin(Editor)
-      .setStore(Store, {prefix: 'http://annotate.wordtree.org/api'})
-      // .addPlugin(Auth, {tokenUrl: 'http://localhost:4000/api/token'})
+      .setStore(Store, {prefix: '<%= config[:annotation_store_host] %>/api'})
+      .addPlugin(Auth, {tokenUrl: '<%= config[:token_url] %>'})
       // .addPlugin(Permissions)
       .addPlugin(Unsupported)
       .addPlugin(Markdown)
